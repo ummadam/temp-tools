@@ -4,6 +4,7 @@ namespace App;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
+use App\Currency;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Product extends Model
@@ -39,7 +40,9 @@ class Product extends Model
 
     public function presentPrice()
     {
-        return money_format('₸%i', $this->price / 100);
+        $currency = Currency::get();
+       
+        return number_format($this->price*$currency[0]->value, 0, '.', ' '). ' ₸' ;
     }
 
     public function scopeMightAlsoLike($query)

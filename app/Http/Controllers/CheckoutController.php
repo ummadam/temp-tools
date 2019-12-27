@@ -63,7 +63,7 @@ class CheckoutController extends Controller
     {
         // Check race condition when there are less items available to purchase
         if ($this->productsAreNoLongerAvailable()) {
-            return back()->withErrors('Sorry! One of the items in your cart is no longer avialble.');
+            return back()->withErrors('Извините! Один из товаров в вашей корзине не доступен для покупки');
         }
 
         $contents = Cart::content()->map(function ($item) {
@@ -71,29 +71,29 @@ class CheckoutController extends Controller
         })->values()->toJson();
 
        try {
-            /*$charge = Stripe::charges()->create([
-                'amount' => getNumbers()->get('newTotal') / 100,
-                'currency' => 'CAD',
-                'source' => $request->stripeToken,
-                'description' => 'Order',
-                'receipt_email' => $request->email,
-                'metadata' => [
-                    'contents' => $contents,
-                    'quantity' => Cart::instance('default')->count(),
-                    'discount' => collect(session()->get('coupon'))->toJson(),
-                ],
-            ]);*/
+            //     $charge = Stripe::charges()->create([
+            //     'amount' => getNumbers()->get('newTotal') / 100,
+            //     'currency' => 'CAD',
+            //     'source' => $request->stripeToken,
+            //     'description' => 'Order',
+            //     'receipt_email' => $request->email,
+            //     'metadata' => [
+            //         'contents' => $contents,
+            //         'quantity' => Cart::instance('default')->count(),
+                    
+            //     ],
+            // ]);
 
             $order = $this->addToOrdersTables($request, null);
-           // Mail::send(new OrderPlaced($order));
+           Mail::send(new OrderPlaced($order));
 
             // decrease the quantities of all the products in the cart
-            $this->decreaseQuantities();
+            // $this->decreaseQuantities();
 
             Cart::instance('default')->destroy();
-            session()->forget('coupon');
+            // session()->forget('coupon');
 
-            return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
+            return redirect()->route('confirmation.index')->with('success_message', 'Спасибо! Ваш заказ принят!');
         } catch (CardErrorException $e) {
             $this->addToOrdersTables($request, $e->getMessage());
             return back()->withErrors('Error! ' . $e->getMessage());
@@ -145,7 +145,7 @@ class CheckoutController extends Controller
             $this->decreaseQuantities();
 
             Cart::instance('default')->destroy();
-            session()->forget('coupon');
+            // session()->forget('coupon');
 
             return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
         } else {
@@ -167,16 +167,9 @@ class CheckoutController extends Controller
             'billing_email' => $request->email,
             'billing_name' => $request->name,
             'billing_address' => $request->address,
-            'billing_city' => $request->city,
-            'billing_province' => $request->province,
-            'billing_postalcode' => $request->postalcode,
-            'billing_phone' => $request->phone,
-            'billing_name_on_card' => $request->name_on_card,
-            'billing_discount' => getNumbers()->get('discount'),
-            'billing_discount_code' => getNumbers()->get('code'),
-            'billing_subtotal' => getNumbers()->get('newSubtotal'),
-            'billing_tax' => getNumbers()->get('newTax'),
-            'billing_total' => getNumbers()->get('newTotal'),
+            'billing_city' => $request->city,                    
+            'billing_phone' => $request->phone,            
+            'billing_total' => Cart::subtotal(),
             'error' => $error,
         ]);
 

@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Thank You')
+@section('title', 'Спасибо')
 
 @section('extra-css')
 

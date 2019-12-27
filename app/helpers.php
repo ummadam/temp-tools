@@ -1,10 +1,13 @@
 <?php
 
 use Carbon\Carbon;
+use App\Currency;
 
 function presentPrice($price)
 {
-    return money_format('$%i', $price / 100);
+    $currency = Currency::get();
+     
+    return number_format($price*$currency[0]->value, 0, '.', ' '). ' ₸' ;
 }
 
 function presentDate($date)
