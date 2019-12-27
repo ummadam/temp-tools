@@ -13,12 +13,12 @@ class CreateSpecificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('specifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->name('string');
-            $table->ms_value('string');
-            $table->timestamps();
-        });
+        // Schema::create('specifications', function (Blueprint $table) {
+        //     $table->bigIncrements('id');
+        //     $table->name('string');
+        //     $table->ms_value('string');
+        //     $table->timestamps();
+        // });
     }
 
     /**
@@ -28,6 +28,6 @@ class CreateSpecificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('specifications');
+        // Schema::dropIfExists('specifications');
     }
 }

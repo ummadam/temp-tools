@@ -1,32 +1,32 @@
 @component('mail::message')
-# Order Received
+# Заказ принят
 
-Thank you for your order.
+Спасибо Вам за ваш заказ.
 
-**Order ID:** {{ $order->id }}
+**Заказ №:** {{ $order->id }}
 
-**Order Email:** {{ $order->billing_email }}
+**Email:** {{ $order->billing_email }}
 
-**Order Name:** {{ $order->billing_name }}
+**Имя:** {{ $order->billing_name }}
 
-**Order Total:** ${{ round($order->billing_total / 100, 2) }}
+**Сумма заказа:** {{ presentPrice($order->billing_total) }}
 
-**Items Ordered**
+**Ваш заказ: **
 
 @foreach ($order->products as $product)
-Name: {{ $product->name }} <br>
-Price: ${{ round($product->price / 100, 2)}} <br>
-Quantity: {{ $product->pivot->quantity }} <br>
+Название: {{ $product->name }} <br>
+Цена: {{ $product->presentPrice()}} <br>
+Количество: {{ $product->pivot->quantity }} <br>
 @endforeach
 
-You can get further details about your order by logging into our website.
+Вы можете получить больше информации по ссылке ниже.
 
-@component('mail::button', ['url' => config('app.url'), 'color' => 'green'])
-Go to Website
+@component('mail::button', ['url' => 'https://seakoo.kz/my-orders/', 'color' => 'green'])
+Мои заказы
 @endcomponent
 
-Thank you again for choosing us.
+Спасибо еще раз за Ваш выбор.
 
-Regards,<br>
-{{ config('app.name') }}
+С наилучшими пожеланиями,<br>
+Seakoo.kz
 @endcomponent

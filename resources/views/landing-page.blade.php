@@ -87,25 +87,25 @@
                     </div>
                 </div>
 
-                    {{-- <div class="hero container" id="showcase">
+                    <!-- <div class="hero container" id="showcase">
                         <img class="3d-slide olx" src="./img/products/laptop-1.jpg" alt="">
                         <img class="3d-slide olx" src="./img/products/laptop-2.jpg" alt="">
                         <img class="3d-slide olx" src="./img/products/laptop-3.jpg" alt="">
                         <img class="3d-slide olx" src="./img/products/laptop-4.jpg" alt="">
                         <img class="3d-slide olx" src="./img/products/laptop-5.jpg" alt="">
                         <img class="3d-slide olx" src="./img/products/laptop-6.jpg" alt="">
-                    </div> --}}
+                    </div> 
 
-                    {{-- <div class="tabs">
+                     <div class="tabs">
                         <div class="tab">
                             Популярные
                         </div>
                         <div class="tab">
                             Распродажа
                         </div>
-                    </div> --}}
+                    </div> 
 
-                    {{-- <div class="products text-center">
+                     <div class="products text-center">
                         @foreach ($products as $product)
                             <div class="product">
                                 <a href="{{ route('shop.show', $product->slug) }}"><img src="{{ productImage($product->image) }}" alt="product"></a>
@@ -114,7 +114,7 @@
                             </div>
                         @endforeach
 
-                    </div> <!-- end products --> --}}
+                    </div> end products  -->
 
                     <div class="text-center button-container">
                         <a href="{{ route('shop.index') }}" class="button">Больше продуктов</a>

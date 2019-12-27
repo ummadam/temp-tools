@@ -68,7 +68,8 @@
                                 @endfor
                             </select>
                         </div>
-                        <div>{{ presentPrice($item->subtotal) }}</div>
+                        
+                        <div>{{ $item->model->presentPrice() }}</div>
                     </div>
                 </div> <!-- end cart-table-row -->
                 @endforeach
@@ -117,6 +118,7 @@
                             {{ presentPrice($newSubtotal) }} <br>
                         @endif
                         {{ presentPrice($newTax) }} <br>-->
+                        
                         <span class="cart-totals-total">{{ presentPrice(Cart::subtotal()) }}</span>
                     </div>
                 </div>

@@ -66,11 +66,7 @@
                         </div>
                     </div> <!-- end half-form -->
 
-                    <div class="half-form">
-                        <div class="form-group">
-                            <label for="postalcode">Почтовый Индекс</label>
-                            <input type="text" class="form-control" id="postalcode" name="postalcode" value="{{ old('postalcode') }}">
-                        </div>
+                    <div class="half-form">                        
                         <div class="form-group">
                             <label for="phone">Телефон</label>
                             <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" required>
@@ -137,7 +133,8 @@
                             <div class="checkout-item-details">
                                 <div class="checkout-table-item">{{ $item->model->name }}</div>
                                 <div class="checkout-table-description">{{ $item->model->details }}</div>
-                                <div class="checkout-table-price">{{ $item->model->presentPrice() }}</div>
+                                
+                                <div class="checkout-table-price">{{ $item->model->presentPrice()}} </div>
                             </div>
                         </div> <!-- end checkout-table -->
 
@@ -171,6 +168,7 @@
                             {{ presentPrice($newSubtotal) }} <br>
                         @endif
                         {{ presentPrice($newTax) }} <br> -->
+                        
                         <span class="checkout-totals-total">{{ presentPrice(Cart::subtotal()) }}</span>
 
                     </div>
