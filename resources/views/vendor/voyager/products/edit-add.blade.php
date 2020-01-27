@@ -84,7 +84,34 @@
                                     <li><label><input value="{{ $category->id }}" type="checkbox" name="category[]" style="margin-right: 5px;" {{ $categoriesForProduct->contains($category) ? 'checked' : '' }}>{{ $category->name }}</label></li>
                                 @endforeach
                                 </ul>
-                            </div> <!-- end form-group -->
+                            </div> 
+                            <div class="form-group">
+                                <label>Specifications</label>
+
+                                <ul style="list-style-type: none; padding-left: 0">
+                                @foreach ($allSpecifications as $specification)
+                                    <li><label><input value="{{ $specification->id }}" type="checkbox" name="specification[]" style="margin-right: 5px;" {{ $specificationsForProduct->contains($specification) ? 'checked' : '' }}>{{ $specification->name }}</label>
+                                    <br>
+                                   @if(!$specificationsForProduct->contains($specification))
+                                   <input value="" type="text" name="s[]" style="margin-right: 5px;" >
+                                   @endif
+                                    
+                                    @foreach($values as $value)  
+                                    @if($specification->id === $value->specification_id)
+                                    <input value="{{ $value->value }}" type="text" name="s[]" style="margin-right: 5px;" >                            
+                                    
+                                     @endif
+                                     
+                                   
+                                    
+                                   @endforeach
+
+                                  
+                                    </li>
+                                @endforeach
+                                </ul>
+                            </div>
+                            <!-- end form-group -->
 
                         </div><!-- panel-body -->
 
@@ -191,7 +218,7 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             var price = $('input[name="price"').val();
-            $('input[name="price"').val(price / 100);
+            $('input[name="price"').val(price);
         });
     </script>
 @stop

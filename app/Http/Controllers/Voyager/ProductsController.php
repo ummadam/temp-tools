@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Voyager;
 use App\Product;
 use App\Category;
 use App\CategoryProduct;
+use App\Specification;
+use App\Product_Specs;
 use Illuminate\Http\Request;
 use TCG\Voyager\Facades\Voyager;
 use Illuminate\Support\Facades\DB;
@@ -157,10 +159,14 @@ class ProductsController extends VoyagerBaseController
 
         $allCategories = Category::all();
 
+        $allSpecifications = Specification::all();
+
         $product = Product::find($id);
         $categoriesForProduct = $product->categories()->get();
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'allCategories', 'categoriesForProduct'));
+        $specificationsForProduct = $product->specifications()->get();
+        $values = Product_Specs::where('product_id',$id)->get();
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'allCategories', 'categoriesForProduct','allSpecifications', 'specificationsForProduct','values'));
     }
 
     // POST BR(E)AD
@@ -187,7 +193,7 @@ class ProductsController extends VoyagerBaseController
 
         if (!$request->ajax()) {
             $requestNew = $request;
-            $requestNew['price'] = $request->price * 100;
+            $requestNew['price'] = $request->price;
 
             $this->insertUpdateData($requestNew, $slug, $dataType->editRows, $data);
 
@@ -195,8 +201,11 @@ class ProductsController extends VoyagerBaseController
 
             CategoryProduct::where('product_id', $id)->delete();
 
+            Product_Specs::where('product_id', $id)->delete();
+
             // Re-insert if there's at least one category checked
             $this->updateProductCategories($request, $id);
+            $this->updateProductSepcifications($request, $data->id);
 
             return redirect()
                 ->route("voyager.{$dataType->slug}.index")
@@ -244,16 +253,18 @@ class ProductsController extends VoyagerBaseController
         // Check if BREAD is Translatable
         $isModelTranslatable = is_bread_translatable($dataTypeContent);
 
-        $view = 'voyager::bread.edit-add';
+        $view = 'voyager::bread.add';
 
-        if (view()->exists("voyager::$slug.edit-add")) {
-            $view = "voyager::$slug.edit-add";
+        if (view()->exists("voyager::$slug.add")) {
+            $view = "voyager::$slug.add";
         }
 
         $allCategories = Category::all();
-        $categoriesForProduct = collect([]);
+        $allSpecifications = Specification::all();
 
-        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'allCategories', 'categoriesForProduct'));
+        $categoriesForProduct = collect([]);
+        $specificationsForProduct = collect([]);
+        return Voyager::view($view, compact('dataType', 'dataTypeContent', 'isModelTranslatable', 'allCategories', 'categoriesForProduct','allSpecifications', 'specificationsForProduct'));
     }
 
     /**
@@ -265,6 +276,7 @@ class ProductsController extends VoyagerBaseController
      */
     public function store(Request $request)
     {
+        
         $slug = $this->getSlug($request);
 
         $dataType = Voyager::model('DataType')->where('slug', '=', $slug)->first();
@@ -281,13 +293,14 @@ class ProductsController extends VoyagerBaseController
 
         if (!$request->ajax()) {
             $requestNew = $request;
-            $requestNew['price'] = $request->price * 100;
+            $requestNew['price'] = $request->price;
 
             $data = $this->insertUpdateData($requestNew, $slug, $dataType->addRows, new $dataType->model_name());
 
             event(new BreadDataAdded($dataType, $data));
 
             $this->updateProductCategories($request, $data->id);
+            $this->updateProductSepcifications($request, $data->id);
 
             return redirect()
                 ->route("voyager.{$dataType->slug}.index")
@@ -306,6 +319,25 @@ class ProductsController extends VoyagerBaseController
                     'product_id' => $id,
                     'category_id' => $category,
                 ]);
+            }
+        }
+    }
+
+    protected function updateProductSepcifications(Request $request, $id)
+    {
+        
+        if ($request->specification && $request->s) {
+            $specs = $request->specification;
+            $values = $request->s;
+            for ($i=0; $i<count($values); $i++) {
+                if($values[$i] !== null){
+                    Product_Specs::create([
+                        'product_id' => $id,
+                        'specification_id' => $i+1,
+                        'value' => $values[$i]
+                    ]);
+
+                }
             }
         }
     }

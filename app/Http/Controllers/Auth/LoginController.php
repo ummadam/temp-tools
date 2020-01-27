@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Category;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
@@ -46,8 +47,13 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         session()->put('previousUrl', url()->previous());
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
 
-        return view('auth.login');
+        return view('auth.login')->with([
+            'categories' => $categories,
+            'category' => $category,
+        ]);
     }
 
     // override logout so cart contents remain:

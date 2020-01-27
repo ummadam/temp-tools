@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Checkout')
+@section('title', 'Заказ')
 
 @section('extra-css')
     <style>

@@ -1,18 +1,17 @@
 <?php
 
 use Carbon\Carbon;
-use App\Currency;
 
 function presentPrice($price)
 {
-    $currency = Currency::get();
-     
-    return number_format($price*$currency[0]->value, 0, '.', ' '). ' ₸' ;
+    
+     return number_format($price , 0, '.', ' '). ' ₸' ;
+    // else return number_format(0, 0, ' '). ' ₸';
 }
 
 function presentDate($date)
 {
-    return Carbon::parse($date)->format('M d, Y');
+    return Carbon::parse($date)->format('d.m.Y');
 }
 
 function setActiveCategory($category, $output = 'active')
@@ -58,4 +57,11 @@ function getStockLevel($quantity)
     }
 
     return $stockLevel;
+}
+
+function isActive(bool $boolean, bool $withClass = true)
+{
+    if ($boolean) {
+        echo ($withClass) ? 'class="is-active"' : ' is-active';
+    }
 }

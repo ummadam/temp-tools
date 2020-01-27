@@ -1,18 +1,20 @@
 @extends('layout')
 
 @section('title', 'Shopping Cart')
+<link rel="stylesheet" href="{{ asset('main_style/css/animate.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/owl.carousel.min.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/jquery-ui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/slicknav.min.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/flaticon.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/font-awesome.min.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('main_style/css/style.css') }}">
 
 @section('extra-css')
     <link rel="stylesheet" href="{{ asset('css/algolia.css') }}">
 @endsection
 
 @section('content')
-
-    @component('components.breadcrumbs')
-        <a href="#">Главная</a>
-        <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span>Корзина</span>
-    @endcomponent
 
     <div class="cart-section container">
         <div>
@@ -38,6 +40,8 @@
 
             <div class="cart-table">
                 @foreach (Cart::content() as $item)
+
+
                 <div class="cart-table-row">
                     <div class="cart-table-row-left">
                         <a href="{{ route('shop.show', $item->model->slug) }}"><img src="{{ productImage($item->model->image) }}" alt="item" class="cart-table-img"></a>
@@ -62,13 +66,14 @@
                             </form>
                         </div>
                         <div>
+
                             <select class="quantity" data-id="{{ $item->rowId }}" data-productQuantity="{{ $item->model->quantity }}">
                                 @for ($i = 1; $i < 5 + 1 ; $i++)
                                     <option {{ $item->qty == $i ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                             </select>
                         </div>
-                        
+
                         <div>{{ $item->model->presentPrice() }}</div>
                     </div>
                 </div> <!-- end cart-table-row -->
@@ -88,7 +93,7 @@
                     </form>
                 </div>
             @endif -->
-    
+
             <div class="cart-totals">
                 <div class="cart-totals-left">
                     Доставка свыше 50000 тг бесплатна.
@@ -118,7 +123,7 @@
                             {{ presentPrice($newSubtotal) }} <br>
                         @endif
                         {{ presentPrice($newTax) }} <br>-->
-                        
+
                         <span class="cart-totals-total">{{ presentPrice(Cart::subtotal()) }}</span>
                     </div>
                 </div>
@@ -215,7 +220,11 @@
     </script>
 
     <!-- Include AlgoliaSearch JS Client and autocomplete.js library -->
-    <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
-    <script src="{{ asset('js/algolia.js') }}"></script>
+    <script src="{{ asset('main_style/js/jquery-3.2.1.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/bootstrap.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/jquery.slicknav.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/owl.carousel.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/jquery.nicescroll.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/jquery-ui.min.js') }}"></script>
+	<script src="{{ asset('main_style/js/main.js') }}"></script>
 @endsection

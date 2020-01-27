@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Category;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class SaveForLaterController extends Controller

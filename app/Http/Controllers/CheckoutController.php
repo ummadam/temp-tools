@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\Product;
 use App\OrderProduct;
+use App\Category;
 use App\Mail\OrderPlaced;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -22,6 +23,9 @@ class CheckoutController extends Controller
      */
     public function index()
     {
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
+
         if (Cart::instance('default')->count() == 0) {
             return redirect()->route('shop.index');
         }
@@ -49,6 +53,8 @@ class CheckoutController extends Controller
             'newSubtotal' => getNumbers()->get('newSubtotal'),
             'newTax' => getNumbers()->get('newTax'),
             'newTotal' => getNumbers()->get('newTotal'),
+            'category' => $category,
+            'categories' => $categories,
         ]);
     }
 
@@ -62,9 +68,9 @@ class CheckoutController extends Controller
     public function store(CheckoutRequest $request)
     {
         // Check race condition when there are less items available to purchase
-        if ($this->productsAreNoLongerAvailable()) {
-            return back()->withErrors('Извините! Один из товаров в вашей корзине не доступен для покупки');
-        }
+        // if ($this->productsAreNoLongerAvailable()) {
+        //     return back()->withErrors('Извините! Один из товаров в вашей корзине не доступен для покупки');
+        // }
 
         $contents = Cart::content()->map(function ($item) {
             return $item->model->slug.', '.$item->qty;

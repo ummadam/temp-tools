@@ -9,13 +9,16 @@
 
 @section('content')
 
-    @component('components.breadcrumbs')
-        <a href="/">Главная</a>
-        <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span>Продукты</span>
-    @endcomponent
-
+   
+<section class="category-section spad">
     <div class="container">
+    <div class="site-pagination">
+      <a href="/">Главная</a>
+        ->
+        <span>Продукты</span>
+        ->
+        <span>{{ $categoryName }}</span>
+    </div>
         @if (session()->has('success_message'))
             <div class="alert alert-success">
                 {{ session()->get('success_message') }}
@@ -31,6 +34,7 @@
                 </ul>
             </div>
         @endif
+        
     </div>
 
     <div class="products-section container">
@@ -61,8 +65,8 @@
                 <h1 class="stylish-heading">Популярные товары</h1>
                 <div>
                     <strong>Цена: </strong>
-                    <a href="{{ route('shop.index', ['category'=> request()->category, 'sort' => 'low_high']) }}">Сначала дешевые</a> |
-                    <a href="{{ route('shop.index', ['category'=> request()->category, 'sort' => 'high_low']) }}">Сначала дорогие</a>
+                    <a href="{{ route('shop.index', ['category'=> request()->category, 'sort' => 'low_high']) }}">По возрастанию</a> |
+                    <a href="{{ route('shop.index', ['category'=> request()->category, 'sort' => 'high_low']) }}">По убыванию</a>
 
                 </div>
             </div>
@@ -83,7 +87,7 @@
             {{ $products->appends(request()->input())->links() }}
         </div>
     </div>
-
+</section>
 @endsection
 
 @section('extra-js')

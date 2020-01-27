@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title', 'Reset Password')
+@section('title', 'Забыли пароль')
 @section('content')
 <div class="container">
     <div class="auth-pages">
@@ -17,26 +17,25 @@
                 </ul>
             </div>
             @endif
-            <h2>Forgot Password?</h2>
+            <h2>Забыли пароль?</h2>
             <div class="spacer"></div>
             <form action="{{ route('password.email') }}" method="POST">
                 {{ csrf_field() }}
                 <input type="email" id="email" name="email" value="{{ old('email') }}" placeholder="Email" required autofocus>
                 <div class="login-container">
-                    <button type="submit" class="auth-button">Send Password Reset Link</button>
+                    <button type="submit" class="auth-button">Отправить ссылку для востановления пароля</button>
                 </div>
 
 
             </form>
         </div>
         <div class="auth-right">
-            <h2>Forgotten Password Information</h2>
+            <h2>Востановление пароля</h2>
             <div class="spacer"></div>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel dicta obcaecati exercitationem ut atque inventore cum. Magni autem error ut!</p>
+            <p>Вам на почту придет пароль</p>
             <div class="spacer"></div>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel accusantium quasi necessitatibus rerum fugiat eos, a repudiandae tempore nisi ipsa delectus sunt natus!</p>
+            <p></p>
         </div>
     </div>
 </div>
 @endsection
-

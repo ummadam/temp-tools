@@ -33,7 +33,7 @@ class OrderPlaced extends Mailable
     {
         return $this->to($this->order->billing_email, $this->order->billing_name)
                     ->bcc('seakoo@inbox.ru')
-                    ->subject('Заказ оформлен на сайте Seakoo.kz')
+                    ->subject('Заказ оформлен на сайте Seakoo-pumps.kz')
                     ->markdown('emails.orders.placed');
     }
 }

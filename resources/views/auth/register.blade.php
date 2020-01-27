@@ -19,7 +19,7 @@
                 </ul>
             </div>
             @endif
-            <h2>Create Account</h2>
+            <h2>Новый аккаунт</h2>
             <div class="spacer"></div>
 
             <form method="POST" action="{{ route('register') }}">

@@ -6,6 +6,7 @@ use App\Product;
 use App\Product_Specs;
 use App\Specification;
 use App\Category;
+use App\Review;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -20,17 +21,17 @@ class ShopController extends Controller
         $pagination = 9;
         $category = Category::get();
         $categories = Category::whereNull('parent_id')->get();
-       
-       
+
+
 
         if (request()->category) {
             $products = Product::with('categories')->whereHas('categories', function ($query) {
                 $query->where('slug', request()->category);
             });
-            //$categoryName = optional($categories->where('slug', request()->category)->first())->name;
+            $categoryName = optional($category->where('slug', request()->category)->first())->name;
         } else {
             $products = Product::where('featured', true);
-            //$categoryName = 'Featured';
+            $categoryName = '';
         }
 
         if (request()->sort == 'low_high') {
@@ -45,6 +46,8 @@ class ShopController extends Controller
             'products' => $products,
             'categories' => $categories,
             'category' => $category,
+            'categoryName' => $categoryName
+
         ]);
     }
 
@@ -58,20 +61,27 @@ class ShopController extends Controller
     {
         $product = Product::where('slug', $slug)->firstOrFail();
         $mightAlsoLike = Product::where('slug', '!=', $slug)->mightAlsoLike()->get();
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
 
         $product_specs = Product_Specs::where('product_id',$product->id)->get();
         foreach($product_specs as $product_spec){
-            $specs[] = Specification:: where('id', $product_spec->spec_id)->get();
+            $specs[] = Specification:: where('id', $product_spec->specification_id)->get();
         }
-       
+
         $stockLevel = getStockLevel($product->quantity);
+
+        $reviews = $product->reviews();
 
         return view('product')->with([
             'product' => $product,
             'stockLevel' => $stockLevel,
             'mightAlsoLike' => $mightAlsoLike,
             'product_specs' => $product_specs,
-            'specs'         => $specs           
+            'specs'         => isset($specs)? $specs : '' ,
+            'categories' => $categories,
+            'category' => $category,
+            'reviews' => $reviews,
         ]);
     }
 
@@ -81,17 +91,33 @@ class ShopController extends Controller
             'query' => 'required|min:3',
         ]);
 
-        $query = $request->input('query');
+        $q = $request->input('query');
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
 
-        $products = Product::where('name', 'like', "%$query%")
-        //                    ->orWhere('details', 'like', "%$query%")
-        //                    ->orWhere('description', 'like', "%$query%")
-                           ->paginate(10);
+        $terms = explode(" ",$request->input('query'));
+            foreach($terms as $term){
+                $array[] =  '%' . mb_strtoupper($term) . '%';
+            }
 
-        // $products = Product::search($query)->paginate(10);
+            $products = Product::when(isset($q), function ($query) use ($array) {
+                foreach($array as $term){
+                    $query  ->where(\DB::raw('UPPER(name)'), 'LIKE', $term)
+                            ->orWhere(\DB::raw('UPPER(details)'), 'LIKE', '%' . $term)
+                            ->orWhere(\DB::raw('UPPER(description)'), 'LIKE', '%' . $term);
 
-        return view('search-results')->with('products', $products);
+
+                }
+
+            })->paginate(10); ;
+
+
+        return view('search-results')->with([
+            'products' => $products,
+            'categories' => $categories,
+            'category' => $category,
+            ]);
     }
 
-    
+
 }

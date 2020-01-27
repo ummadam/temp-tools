@@ -57,7 +57,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'seakoo@inbox.ru'),
-        'name' => env('MAIL_FROM_NAME', 'Seakoo.kz'),
+        'name' => env('MAIL_FROM_NAME', 'Seakoo-pumps.kz'),
     ],
 
     /*

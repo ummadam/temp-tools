@@ -4,7 +4,6 @@ namespace App;
 
 use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\Model;
-use App\Currency;
 use Nicolaslopezj\Searchable\SearchableTrait;
 
 class Product extends Model
@@ -38,11 +37,20 @@ class Product extends Model
         return $this->belongsToMany('App\Category');
     }
 
+    public function specifications()
+    {
+        return $this->belongsToMany('App\Specification');
+    }
+
+    public function reviews()
+        {
+            return $this->hasMany(Review::class);
+        }
     public function presentPrice()
     {
-        $currency = Currency::get();
        
-        return number_format($this->price*$currency[0]->value, 0, '.', ' '). ' ₸' ;
+
+        return number_format($this->price, 0, '.', ' '). ' ₸' ;
     }
 
     public function scopeMightAlsoLike($query)

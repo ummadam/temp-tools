@@ -19,7 +19,7 @@
                 </ul>
             </div>
             @endif
-            <h2>Reset Password</h2>
+            <h2>Востановить пароль</h2>
             <div class="spacer"></div>
             <form class="form-horizontal" method="POST" action="{{ route('password.request') }}">
                 {{ csrf_field() }}
@@ -33,7 +33,7 @@
                 <input id="password-confirm" type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
 
                 <div class="login-container">
-                    <button type="submit" class="auth-button">Reset Password</button>
+                    <button type="submit" class="auth-button">Востановить пароль</button>
                 </div>
 
             </form>

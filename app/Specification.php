@@ -11,5 +11,10 @@ class Specification extends Model
 
     protected $table = 'specifications';
 
+    public function products()
+    {
+        return $this->belongsToMany('App\Product');
+    }
+
     
 }

@@ -1,4 +1,5 @@
 <ul>
+    <li class="active"><a href="./">Главная</a></li>
     @foreach($items as $menu_item)
         <li>
             <a href="{{ $menu_item->link() }}">
@@ -11,4 +12,5 @@
             </a>
         </li>
     @endforeach
+    <li><a href="/contacts">Контакты</a></li>
 </ul>

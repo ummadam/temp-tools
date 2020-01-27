@@ -8,12 +8,6 @@
 
 @section('content')
 
-    @component('components.breadcrumbs')
-        <a href="/">Home</a>
-        <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span>My Order</span>
-    @endcomponent
-
     <div class="container">
         @if (session()->has('success_message'))
             <div class="alert alert-success">
@@ -36,13 +30,13 @@
         <div class="sidebar">
 
             <ul>
-              <li><a href="{{ route('users.edit') }}">My Profile</a></li>
-              <li class="active"><a href="{{ route('orders.index') }}">My Orders</a></li>
+              <li><a href="{{ route('users.edit') }}">Мой профиль</a></li>
+              <li class="active"><a href="{{ route('orders.index') }}">Мои заказы</a></li>
             </ul>
         </div> <!-- end sidebar -->
         <div class="my-profile">
             <div class="products-header">
-                <h1 class="stylish-heading">Order ID: {{ $order->id }}</h1>
+                <h1 class="stylish-heading">ID заказа: {{ $order->id }}</h1>
             </div>
 
             <div>
@@ -50,48 +44,38 @@
                     <div class="order-header">
                         <div class="order-header-items">
                             <div>
-                                <div class="uppercase font-bold">Order Placed</div>
+                                <div class="uppercase font-bold">Заказ оформлен</div>
                                 <div>{{ presentDate($order->created_at) }}</div>
                             </div>
                             <div>
-                                <div class="uppercase font-bold">Order ID</div>
+                                <div class="uppercase font-bold">ID заказа</div>
                                 <div>{{ $order->id }}</div>
                             </div><div>
-                                <div class="uppercase font-bold">Total</div>
+                                <div class="uppercase font-bold">Сумма</div>
                                 <div>{{ presentPrice($order->billing_total) }}</div>
                             </div>
                         </div>
-                        <div>
-                            <div class="order-header-items">
-                                <div><a href="#">Invoice</a></div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="order-products">
                         <table class="table" style="width:50%">
                             <tbody>
                                 <tr>
-                                    <td>Name</td>
+                                    <td>Имя</td>
                                     <td>{{ $order->user->name }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Address</td>
+                                    <td>Адрес</td>
                                     <td>{{ $order->billing_address }}</td>
                                 </tr>
                                 <tr>
-                                    <td>City</td>
+                                    <td>Город</td>
                                     <td>{{ $order->billing_city }}</td>
                                 </tr>
+
+
                                 <tr>
-                                    <td>Subtotal</td>
-                                    <td>{{ presentPrice($order->billing_subtotal) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Tax</td>
-                                    <td>{{ presentPrice($order->billing_tax) }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Total</td>
+                                    <td>Сумма</td>
                                     <td>{{ presentPrice($order->billing_total) }}</td>
                                 </tr>
                             </tbody>
@@ -104,7 +88,7 @@
                     <div class="order-header">
                         <div class="order-header-items">
                             <div>
-                                Order Items
+                                Список товаров:
                             </div>
 
                         </div>
@@ -112,13 +96,13 @@
                     <div class="order-products">
                         @foreach ($products as $product)
                             <div class="order-product-item">
-                                <div><img src="{{ asset($product->image) }}" alt="Product Image"></div>
+                                <div><img src="{{ productImage($product->image) }}" alt="Product Image"></div>
                                 <div>
                                     <div>
                                         <a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a>
                                     </div>
                                     <div>{{ $product->presentPrice() }}</div>
-                                    <div>Quantity: {{ $product->pivot->quantity }}</div>
+                                    <div>Количество: {{ $product->pivot->quantity }}</div>
                                 </div>
                             </div>
                         @endforeach

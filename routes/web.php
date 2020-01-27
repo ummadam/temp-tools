@@ -7,7 +7,11 @@ Route::get('/shop/{product}', 'ShopController@show')->name('shop.show');
 
 Route::get('/about', 'AboutController@index')->name('about.index');
 
+
+Route::get('/delivery', 'DeliveryController@index')->name('delivery');
+
 Route::get('/news', 'NewsController@index')->name('news.index');
+Route::post('/shop', 'ReviewController@store')->name('review.store');
 
 Route::get('/cart', 'CartController@index')->name('cart.index');
 Route::post('/cart/{product}', 'CartController@store')->name('cart.store');
@@ -30,7 +34,6 @@ Route::get('/guestCheckout', 'CheckoutController@index')->name('guestCheckout.in
 
 Route::get('/thankyou', 'ConfirmationController@index')->name('confirmation.index');
 
-
 Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
@@ -38,6 +41,8 @@ Route::group(['prefix' => 'admin'], function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/contacts', 'ContactsController@index')->name('contacts');
 
 Route::get('/search', 'ShopController@search')->name('search');
 

@@ -21,12 +21,12 @@
 
 Вы можете получить больше информации по ссылке ниже.
 
-@component('mail::button', ['url' => 'https://seakoo.kz/my-orders/', 'color' => 'green'])
+@component('mail::button', ['url' => 'http://seakoo-pumps.kz/my-orders/', 'color' => 'green'])
 Мои заказы
 @endcomponent
 
 Спасибо еще раз за Ваш выбор.
 
 С наилучшими пожеланиями,<br>
-Seakoo.kz
+Seakoo-pumps.kz
 @endcomponent

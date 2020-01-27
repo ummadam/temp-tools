@@ -1,8 +1,8 @@
 @component('mail::layout')
     {{-- Header --}}
     @slot('header')
-        @component('mail::header', ['url' => 'https://seakoo.kz'])
-        Seakoo.kz
+        @component('mail::header', ['url' => 'https://seakoo-pumps.kz'])
+        Seakoo-pumps.kz
         @endcomponent
     @endslot
 
@@ -21,7 +21,7 @@
     {{-- Footer --}}
     @slot('footer')
         @component('mail::footer')
-            &copy; {{ date('Y') }} Seakoo.kz . Все права защищены.
+            &copy; {{ date('Y') }} Seakoo-pumps.kz . Все права защищены.
         @endcomponent
     @endslot
 @endcomponent

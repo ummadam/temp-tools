@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Order;
+use App\Category;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -15,10 +16,15 @@ class OrdersController extends Controller
     public function index()
     {
         // $orders = auth()->user()->orders; // n + 1 issues
-
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
         $orders = auth()->user()->orders()->with('products')->get(); // fix n + 1 issues
 
-        return view('my-orders')->with('orders', $orders);
+        return view('my-orders')->with([
+            'orders' => $orders,
+            'categories' => $categories,
+            'category' => $category, 
+            ]);
     }
 
     /**
@@ -55,10 +61,14 @@ class OrdersController extends Controller
         }
 
         $products = $order->products;
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
 
         return view('my-order')->with([
             'order' => $order,
             'products' => $products,
+            'categories' => $categories,
+            'category' => $category, 
         ]);
     }
 

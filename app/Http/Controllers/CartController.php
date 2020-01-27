@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\Category;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
@@ -17,6 +18,9 @@ class CartController extends Controller
     public function index()
     {
         $mightAlsoLike = Product::mightAlsoLike()->get();
+        $category = Category::get();
+        $categories = Category::whereNull('parent_id')->get();
+       
 
         return view('cart')->with([
             'mightAlsoLike' => $mightAlsoLike,
@@ -24,6 +28,8 @@ class CartController extends Controller
             'newSubtotal' => getNumbers()->get('newSubtotal'),
             'newTax' => getNumbers()->get('newTax'),
             'newTotal' => getNumbers()->get('newTotal'),
+            'categories' => $categories,
+            'category' => $category,
         ]);
     }
 
@@ -35,18 +41,20 @@ class CartController extends Controller
      */
     public function store(Product $product)
     {
+        $qty = isset($_POST['qty']) ? $_POST['qty'] : 1;
+
         $duplicates = Cart::search(function ($cartItem, $rowId) use ($product) {
             return $cartItem->id === $product->id;
         });
 
         if ($duplicates->isNotEmpty()) {
-            return redirect()->route('cart.index')->with('success_message', 'Item is already in your cart!');
+            return redirect()->route('cart.index')->with('success_message', 'Товар уже в вашей корзине!');
         }
 
-        Cart::add($product->id, $product->name, 1, $product->price)
+        Cart::add($product->id, $product->name, $qty, $product->price)
             ->associate('App\Product');
 
-        return redirect()->route('cart.index')->with('success_message', 'Item was added to your cart!');
+        return redirect()->route('cart.index')->with('success_message', 'Товар добавлен в вашу корзину!');
     }
 
     /**
@@ -63,17 +71,17 @@ class CartController extends Controller
         ]);
 
         if ($validator->fails()) {
-            session()->flash('errors', collect(['Quantity must be between 1 and 5.']));
+            session()->flash('errors', collect(['Количество должно быть от 1 до 5.']));
             return response()->json(['success' => false], 400);
         }
 
         if ($request->quantity > $request->productQuantity) {
-            session()->flash('errors', collect(['We currently do not have enough items in stock.']));
+            session()->flash('errors', collect(['В настоящее время у нас недостаточно товаров на складе.']));
             return response()->json(['success' => false], 400);
         }
 
         Cart::update($id, $request->quantity);
-        session()->flash('success_message', 'Quantity was updated successfully!');
+        session()->flash('success_message', 'Количество было успешно обновлено!');
         return response()->json(['success' => true]);
     }
 
@@ -87,7 +95,7 @@ class CartController extends Controller
     {
         Cart::remove($id);
 
-        return back()->with('success_message', 'Item has been removed!');
+        return back()->with('success_message', 'Товар был удален!');
     }
 
     /**
@@ -107,12 +115,12 @@ class CartController extends Controller
         });
 
         if ($duplicates->isNotEmpty()) {
-            return redirect()->route('cart.index')->with('success_message', 'Item is already Saved For Later!');
+            return redirect()->route('cart.index')->with('success_message', 'Товар уже сохранен на потом!');
         }
 
         Cart::instance('saveForLater')->add($item->id, $item->name, 1, $item->price)
             ->associate('App\Product');
 
-        return redirect()->route('cart.index')->with('success_message', 'Item has been Saved For Later!');
+        return redirect()->route('cart.index')->with('success_message', 'Товар был сохранен на потом!');
     }
 }

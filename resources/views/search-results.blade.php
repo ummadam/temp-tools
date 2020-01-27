@@ -1,72 +1,44 @@
-@extends('layout')
+@extends('main')
 
 @section('title', 'Результаты поиска')
 
 @section('extra-css')
     <link rel="stylesheet" href="{{ asset('css/algolia.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 @endsection
 
 @section('content')
 
-    @component('components.breadcrumbs')
-        <a href="/">Home</a>
-        <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span>Search</span>
-    @endcomponent
+    <div class="search-results-container container" style="padding-bottom: 60px; padding-top: 60px;">
+        <h3>Результаты поиска</h3>
+        <p class="search-results-count" style="padding-bottom: 60px;">Вы искали '{{ request()->input('query') }}'</p>
 
-    <div class="container">
-        @if (session()->has('success_message'))
-            <div class="alert alert-success">
-                {{ session()->get('success_message') }}
-            </div>
-        @endif
-
-        @if(count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-    </div>
-
-    <div class="search-results-container container">
-        <h1>Search Results</h1>
-        <p class="search-results-count">Вы искали '{{ request()->input('query') }}'</p>
-
-        @if ($products->total() > 0)
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
-                    <th>Название</th>
-                    <th>Модель</th>
-                    <th>Описание</th>
-                    <th>Цена</th>
-                </tr>
-            </thead>
-            <tbody>
+        <div class="col-lg-9  order-1 order-lg-2 mb-5 mb-lg-0" style="padding-bottom: 60px;">
+            <div class="row">
                 @foreach ($products as $product)
-                    <tr>
-                        <th><a href="{{ route('shop.show', $product->slug) }}">{{ $product->name }}</a></th>
-                        <td>{{ $product->details }}</td>
-                        <td>{{ str_limit($product->description, 80) }}</td>
-                        <td>{{ $product->presentPrice() }}</td>
-                    </tr>
+                    <div class="col-lg-4 col-sm-6">
+                        <div class="product-item">
+                            <div class="pi-pic">
+                                <a href="{{ route('shop.show', $product->slug) }}"><img src="{{ productImage($product->image) }}" alt="product" height="200px"></a>
+                                <div class="pi-links">
+                                  <form action="{{ route('cart.store', $product) }}" method="POST">
+                    		            {{ csrf_field() }}
+                    		            <button style="all: unset;"><a class="add-card"><i class="flaticon-bag"></i><span style="font-size: 7px;">добавить в корзину</span></a>
+                    	          	</form>
+                                </div>
+                            </div>
+                            <div class="pi-text">
+                                <h6>{{ $product->presentPrice() }}</h6>
+                                <a href="{{ route('shop.show', $product->slug) }}"><p>{{ $product->name }}</p></a>
+
+                            </div>
+                        </div>
+                    </div>
                 @endforeach
-            </tbody>
-        </table>
+            </div>
+        </div>
 
         {{ $products->appends(request()->input())->links() }}
-        @endif
     </div> <!-- end search-results-container -->
 
-@endsection
-
-@section('extra-js')
-    <!-- Include AlgoliaSearch JS Client and autocomplete.js library -->
-    <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
-    <script src="{{ asset('js/algolia.js') }}"></script>
 @endsection

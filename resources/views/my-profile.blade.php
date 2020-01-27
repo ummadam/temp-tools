@@ -8,11 +8,7 @@
 
 @section('content')
 
-    @component('components.breadcrumbs')
-        <a href="/">Главная</a>
-        <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span>Мой профиль</span>
-    @endcomponent
+    
 
     <div class="container">
         @if (session()->has('success_message'))
@@ -49,22 +45,20 @@
                 <form action="{{ route('users.update') }}" method="POST">
                     @method('patch')
                     @csrf
-                    <div class="form-control">
-                        <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="ФИО" required>
-                    </div>
-                    <div class="form-control">
-                        <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" required>
-                    </div>
-                    <div class="form-control">
-                        <input id="password" type="password" name="password" placeholder="Пароль">
-                        <div>Оставьте поле пустым если вы не собираетесь менять пароль</div>
-                    </div>
-                    <div class="form-control">
-                        <input id="password-confirm" type="password" name="password_confirmation" placeholder="Подтвердите пароль">
-                    </div>
                     <div>
-                        <button type="submit" class="my-profile-button">Обновить профиль</button>
+                        <input id="name" type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="ФИО" required>
+
+                        <input id="email" type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="Email" required>
+
+                        <input id="password" type="password" name="password" placeholder="Пароль">
+
+
+                        <input id="password-confirm" type="password" name="password_confirmation" placeholder="Подтвердите пароль">
+                        <div>
+                            <button type="submit" class="my-profile-button">Обновить профиль</button>
+                        </div>
                     </div>
+
                 </form>
             </div>
 
